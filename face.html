@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qushcha - O'z Rasmingiz bilan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FF);
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        h1 {
+            color: #2C3E50;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            color: #34495E;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .score-container, .high-score-container {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2C3E50;
+        }
+        
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 550px;
+            border: 4px solid #2C3E50;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #8ED6FF;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+        }
+        
+        #game-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .controls button {
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 6px 0 #1c5a7a;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        .controls button:hover {
+            background: linear-gradient(to bottom, #2980b9, #1c5a7a);
+            transform: translateY(-2px);
+        }
+        
+        .controls button:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #1c5a7a;
+        }
+        
+        .instructions {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: left;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        
+        .instructions h3 {
+            color: #2C3E50;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        .icon-upload-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        
+        .icon-upload-section h3 {
+            color: #2C3E50;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        .upload-area {
+            border: 3px dashed #3498db;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            background-color: #e8f4fc;
+            border-color: #2980b9;
+        }
+        
+        .upload-area i {
+            font-size: 50px;
+            color: #3498db;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .upload-area p {
+            color: #2C3E50;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .upload-area .file-info {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        #icon-upload {
+            display: none;
+        }
+        
+        .preview-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f1f8ff;
+            border-radius: 10px;
+            border: 2px solid #d6eaf8;
+        }
+        
+        .preview-container h4 {
+            color: #2C3E50;
+            margin-bottom: 10px;
+        }
+        
+        #icon-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #3498db;
+            margin: 0 auto;
+            display: block;
+            background-color: white;
+        }
+        
+        .no-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px dashed #bdc3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 10;
+            display: none;
+        }
+        
+        .game-over h2 {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #e74c3c;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .game-over p {
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+        
+        @media (max-width: 600px) {
+            .game-container {
+                height: 450px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .controls button {
+                padding: 12px 25px;
+                font-size: 18px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .game-container {
+                height: 400px;
+            }
+            
+            .game-info {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+        
+        /* Animatsiya uchun */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .bounce {
+            animation: bounce 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QUSHCHA O'YINI</h1>
+        <p class="subtitle">Qush boshiga o'zingizning rasmingizni qo'ying!</p>
+        
+        <div class="game-info">
+            <div class="score-container">Hisob: <span id="score">0</span></div>
+            <div class="high-score-container">Rekord: <span id="high-score">0</span></div>
+        </div>
+        
+        <div class="game-container">
+            <canvas id="game-canvas"></canvas>
+            <div class="game-over" id="game-over">
+                <h2>O'YIN TUGADI!</h2>
+                <p>Hisobingiz: <span id="final-score">0</span></p>
+                <button onclick="restartGame()">QAYTA BOSHLASH</button>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="start-button" onclick="startGame()">OYINNI BOSHLASH</button>
+            <button id="jump-button" onclick="birdJump()">QUSHNI SAKRATISH</button>
+        </div>
+        
+        <div class="instructions">
+            <h3>O'YIN QOIDALARI</h3>
+            <ul>
+                <li>Qushni to'siqlardan o'tkazib, hisobingizni oshiring</li>
+                <li>Boshqarish: Bo'sh joy, Sichqoncha bosish, Yuqori o'q (↑) yoki "Qushni sakratish" tugmasi</li>
+                <li>Har 5 ochkodan so'ng o'yin tezlashadi</li>
+            </ul>
+            <p style="text-align: center; font-weight: bold; color: #e74c3c;">Avval rasm yuklang, keyin o'ynashingiz mumkin!</p>
+        </div>
+        
+        <div class="icon-upload-section">
+            <h3>📸 QUSH BOSHI UCHUN RASM YUKLASH</h3>
+            
+            <div class="upload-area" onclick="document.getElementById('icon-upload').click()">
+                <div style="font-size: 50px; margin-bottom: 10px;">⬆️</div>
+                <p><strong>Rasm yuklash uchun bosing</strong></p>
+                <p class="file-info">JPG, PNG yoki GIF formatida (max 2MB)</p>
+            </div>
+            
+            <input type="file" id="icon-upload" accept="image/*">
+            
+            <div class="preview-container">
+                <h4>Rasmni ko'rish:</h4>
+                <div id="preview">
+                    <div class="no-image">Rasm yuklanmagan</div>
+                </div>
+                <p id="image-name" style="margin-top: 10px; color: #7f8c8d; font-style: italic;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // O'yin elementlari
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const startButton = document.getElementById('start-button');
+        const jumpButton = document.getElementById('jump-button');
+        const gameOverScreen = document.getElementById('game-over');
+        const scoreElement = document.getElementById('score');
+        const finalScoreElement = document.getElementById('final-score');
+        const highScoreElement = document.getElementById('high-score');
+        const iconUpload = document.getElementById('icon-upload');
+        const preview = document.getElementById('preview');
+        const imageName = document.getElementById('image-name');
+        
+        // O'lchamlarni sozlash
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+        
+        // O'yin parametrlari
+        let gameStarted = false;
+        let gameOver = false;
+        let score = 0;
+        let highScore = localStorage.getItem('qushchaHighScore') || 0;
+        highScoreElement.textContent = highScore;
+        
+        // Qush parametrlari
+        let bird = {
+            x: 100,
+            y: canvas.height / 2,
+            width: 50,
+            height: 35,
+            gravity: 0.5,
+            lift: -12,
+            velocity: 0,
+            
+            // Qush tanasini chizish
+            draw: function() {
+                // Qush tanasi (sariq)
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y, this.width/2, this.height/2, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Qush dumi (to'q sariq)
+                ctx.fillStyle = '#FFA500';
+                ctx.beginPath();
+                ctx.moveTo(this.x - this.width/2, this.y);
+                ctx.lineTo(this.x - this.width - 5, this.y - 8);
+                ctx.lineTo(this.x - this.width - 5, this.y + 8);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Qush qanoti (apelsin rang)
+                ctx.fillStyle = '#FF8C00';
+                ctx.beginPath();
+                ctx.ellipse(this.x + 8, this.y - 8, 18, 10, Math.PI/4, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Qush tumshug'i (qizil)
+                ctx.fillStyle = '#FF4500';
+                ctx.beginPath();
+                ctx.moveTo(this.x + this.width/2, this.y);
+                ctx.lineTo(this.x + this.width/2 + 20, this.y);
+                ctx.lineTo(this.x + this.width/2 + 15, this.y - 4);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Qush boshiga rasm chizish
+                drawBirdHead(this.x - 10, this.y - 12);
+            },
+            
+            // Qushni yangilash
+            update: function() {
+                this.velocity += this.gravity;
+                this.y += this.velocity;
+                
+                // Pastga tushmasligi
+                if (this.y > canvas.height - this.height/2 - 30) {
+                    this.y = canvas.height - this.height/2 - 30;
+                    this.velocity = 0;
+                    if (gameStarted) endGame();
+                }
+                
+                // Yuqoriga chiqmasligi
+                if (this.y < this.height/2) {
+                    this.y = this.height/2;
+                    this.velocity = 0;
+                }
+            },
+            
+            // Sakratish
+            jump: function() {
+                if (!gameStarted) startGame();
+                this.velocity = this.lift;
+            }
+        };
+        
+        // To'siqlar
+        let pipes = [];
+        const pipeWidth = 70;
+        const pipeGap = 160;
+        let pipeSpeed = 3;
+        let pipeFrequency = 120;
+        let frames = 0;
+        
+        // To'siq klass
+        class Pipe {
+            constructor() {
+                this.x = canvas.width;
+                this.top = Math.random() * (canvas.height - pipeGap - 120) + 60;
+                this.bottom = this.top + pipeGap;
+                this.passed = false;
+            }
+            
+            draw() {
+                // Yuqori to'siq
+                ctx.fillStyle = '#27ae60';
+                ctx.fillRect(this.x, 0, pipeWidth, this.top);
+                
+                // Pastki to'siq
+                ctx.fillRect(this.x, this.bottom, pipeWidth, canvas.height - this.bottom);
+                
+                // To'siq chekkalari
+                ctx.fillStyle = '#229954';
+                ctx.fillRect(this.x - 8, this.top - 25, pipeWidth + 16, 25);
+                ctx.fillRect(this.x - 8, this.bottom, pipeWidth + 16, 25);
+            }
+            
+            update() {
+                this.x -= pipeSpeed;
+                
+                // Hisobni oshirish
+                if (!this.passed && this.x + pipeWidth < bird.x) {
+                    this.passed = true;
+                    score++;
+                    scoreElement.textContent = score;
+                    
+                    // Har 5 ochkodan keyin tezlashish
+                    if (score % 5 === 0) {
+                        pipeSpeed += 0.5;
+                    }
+                }
+                
+                // To'siqni olib tashlash
+                if (this.x + pipeWidth < 0) {
+                    pipes.shift();
+                }
+                
+                // Urilishni tekshirish
+                if (
+                    bird.x + bird.width/2 > this.x && 
+                    bird.x - bird.width/2 < this.x + pipeWidth && 
+                    (bird.y - bird.height/2 < this.top || bird.y + bird.height/2 > this.bottom)
+                ) {
+                    endGame();
+                }
+            }
+        }
+        
+        // Qush boshidagi rasm
+        let userImage = null;
+        let userImageLoaded = false;
+        
+        // Qush boshini chizish
+        function drawBirdHead(x, y) {
+            if (userImage && userImageLoaded) {
+                // Foydalanuvchi rasmini chizish
+                try {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(x + 20, y + 15, 22, 0, Math.PI * 2);
+                    ctx.closePath();
+                    ctx.clip();
+                    
+                    ctx.drawImage(userImage, x - 2, y - 7, 45, 45);
+                    ctx.restore();
+                    
+                    // Rasm atrofida halqa
+                    ctx.beginPath();
+                    ctx.arc(x + 20, y + 15, 22, 0, Math.PI * 2);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#FFF';
+                    ctx.stroke();
+                } catch(e) {
+                    console.log("Rasm chizishda xato:", e);
+                    drawDefaultHead(x, y);
+                }
+            } else {
+                // Standart qush boshini chizish
+                drawDefaultHead(x, y);
+            }
+        }
+        
+        // Standart qush boshini chizish
+        function drawDefaultHead(x, y) {
+            // Qush boshi (sariq)
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(x + 20, y + 15, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Qush ko'zi
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(x + 28, y + 12, 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Ko'z yorug'ligi
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(x + 29, y + 11, 1, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Qush boshini ajratib ko'rsatish
+            ctx.beginPath();
+            ctx.arc(x + 20, y + 15, 20, 0, Math.PI * 2);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#FFA500';
+            ctx.stroke();
+        }
+        
+        // Rasm yuklash funksiyasi
+        iconUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Fayl hajmini tekshirish (max 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert("Rasm hajmi 2MB dan oshmasligi kerak!");
+                return;
+            }
+            
+            // Fayl nomini ko'rsatish
+            imageName.textContent = file.name;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    userImage = img;
+                    userImageLoaded = true;
+                    
+                    // Prevyu ko'rsatish
+                    preview.innerHTML = '';
+                    const previewImg = document.createElement('img');
+                    previewImg.id = 'icon-preview';
+                    previewImg.src = e.target.result;
+                    preview.appendChild(previewImg);
+                    
+                    // O'yin boshida rasm borligini bildirish
+                    startButton.classList.add('bounce');
+                    startButton.style.backgroundColor = '#2ecc71';
+                    startButton.style.background = 'linear-gradient(to bottom, #2ecc71, #27ae60)';
+                    startButton.style.boxShadow = '0 6px 0 #1e8449';
+                    
+                    alert("Rasm muvaffaqiyatli yuklandi! Endi o'yinni boshlashingiz mumkin.");
+                };
+                img.onerror = function() {
+                    alert("Rasmni yuklashda xatolik yuz berdi. Boshqa rasm tanlang.");
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+        
+        // O'yinni boshlash
+        function startGame() {
+            if (!userImageLoaded) {
+                alert("Iltimos, avval qush boshiga rasm yuklang!");
+                return;
+            }
+            
+            if (gameStarted) return;
+            
+            gameStarted = true;
+            gameOver = false;
+            score = 0;
+            scoreElement.textContent = score;
+            bird.y = canvas.height / 2;
+            bird.velocity = 0;
+            pipes = [];
+            frames = 0;
+            pipeSpeed = 3;
+            
+            startButton.textContent = "QAYTA BOSHLASH";
+            gameOverScreen.style.display = 'none';
+            
+            // O'yin loopini boshlash
+            gameLoop();
+        }
+        
+        // Qushni sakratish
+        function birdJump() {
+            bird.jump();
+        }
+        
+        // O'yinni qayta boshlash
+        function restartGame() {
+            gameOver = false;
+            startGame();
+        }
+        
+        // O'yinni tugatish
+        function endGame() {
+            gameOver = true;
+            gameStarted = false;
+            
+            // Rekordni yangilash
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('qushchaHighScore', highScore);
+                highScoreElement.textContent = highScore;
+                alert("Yangi rekord! 🎉");
+            }
+            
+            // O'yin tugadi ekranini ko'rsatish
+            finalScoreElement.textContent = score;
+            gameOverScreen.style.display = 'flex';
+        }
+        
+        // Asosiy o'yin loop
+        function gameLoop() {
+            if (!gameStarted) return;
+            
+            // Ekranni tozalash
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Fon
+            ctx.fillStyle = '#8ED6FF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Osmon (gradient)
+            const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height/2);
+            skyGradient.addColorStop(0, '#87CEEB');
+            skyGradient.addColorStop(1, '#B3E0FF');
+            ctx.fillStyle = skyGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height/2);
+            
+            // Quyosh
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(canvas.width - 80, 80, 40, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Bulutlar
+            drawClouds();
+            
+            // Yer
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
+            
+            ctx.fillStyle = '#2E8B57';
+            ctx.fillRect(0, canvas.height - 30, canvas.width, 10);
+            
+            // O'tlar
+            ctx.fillStyle = '#27ae60';
+            for (let i = 0; i < canvas.width; i += 20) {
+                const height = 10 + Math.random() * 15;
+                ctx.fillRect(i, canvas.height - 40, 3, -height);
+            }
+            
+            // To'siqlarni qo'shish
+            if (frames % pipeFrequency === 0) {
+                pipes.push(new Pipe());
+            }
+            
+            // To'siqlarni yangilash va chizish
+            pipes.forEach(pipe => {
+                pipe.update();
+                pipe.draw();
+            });
+            
+            // Qushni yangilash va chizish
+            bird.update();
+            bird.draw();
+            
+            // Hisobni ko'rsatish
+            ctx.font = 'bold 28px Arial';
+            ctx.fillStyle = '#2C3E50';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Hisob: ${score}`, canvas.width/2, 40);
+            
+            // Framesni oshirish
+            frames++;
+            
+            // Loopni davom ettirish
+            if (!gameOver) {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+        
+        // Bulutlarni chizish
+        function drawClouds() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            
+            // Harakatlanuvchi bulutlar
+            for (let i = 0; i < 4; i++) {
+                const cloudX = (frames * 0.3 + i * 150) % (canvas.width + 200) - 100;
+                const cloudY = 60 + i * 50;
+                drawCloud(cloudX, cloudY, 30 + i * 5);
+            }
+        }
+        
+        // Bulut chizish
+        function drawCloud(x, y, size) {
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.arc(x + size * 0.8, y - size * 0.3, size * 0.7, 0, Math.PI * 2);
+            ctx.arc(x + size * 1.5, y, size, 0, Math.PI * 2);
+            ctx.arc(x + size * 1.3, y + size * 0.4, size * 0.6, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.fill();
+        }
+        
+        // Boshqaruv
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space' || event.code === 'ArrowUp') {
+                event.preventDefault();
+                bird.jump();
+            }
+        });
+        
+        canvas.addEventListener('click', function() {
+            bird.jump();
+        });
+        
+        // Mobil qurilmalar uchun
+        canvas.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+            bird.jump();
+        });
+        
+        // O'lchamni moslashtirish
+        window.addEventListener('resize', function() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            drawStartScreen();
+        });
+        
+        // Boshlang'ich ekran
+        function drawStartScreen() {
+            ctx.fillStyle = '#8ED6FF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Yer
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
+            ctx.fillStyle = '#2E8B57';
+            ctx.fillRect(0, canvas.height - 30, canvas.width, 10);
+            
+            // Qush
+            bird.draw();
+            
+            // Matn
+            ctx.font = 'bold 26px Arial';
+            ctx.fillStyle = '#2C3E50';
+            ctx.textAlign = 'center';
+            ctx.fillText("RASM YUKLANG VA O'YINNI BOSHLANG", canvas.width/2, canvas.height/2 + 100);
+            
+            if (!userImageLoaded) {
+                ctx.font = '20px Arial';
+                ctx.fillStyle = '#e74c3c';
+                ctx.fillText("Avval rasm yuklang!", canvas.width/2, canvas.height/2 + 130);
+            }
+        }
+        
+        // Dastlabki ekranni chizish
+        drawStartScreen();
+    </script>
+</body>
+</html>
