@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SmartBank – O'tkazma</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#07111F;
+  --bg2:#0C1929;
+  --surface:#0F2035;
+  --surface2:#152840;
+  --border:rgba(255,255,255,0.07);
+  --accent:#0EA5E9;
+  --accent2:#38BDF8;
+  --blue:#2563EB;
+  --purple:#8B5CF6;
+  --green:#10B981;
+  --red:#F43F5E;
+  --gold:#F59E0B;
+  --white:#EFF6FF;
+  --muted:#6B87A8;
+  --font:'Plus Jakarta Sans',sans-serif;
+}
+html,body{min-height:100vh;background:var(--bg);font-family:var(--font);color:var(--white);}
+::-webkit-scrollbar{width:0;height:0;}
+
+.sbar{display:flex;justify-content:space-between;align-items:center;padding:12px 22px 0;font-size:12px;font-weight:700;max-width:430px;margin:0 auto;opacity:0.7;}
+
+/* PAGE WRAPPER */
+.page{max-width:430px;margin:0 auto;padding:14px 0 120px;}
+
+/* TOPBAR */
+.topbar{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 22px 0;margin-bottom:20px;
+}
+.back{
+  width:42px;height:42px;border-radius:13px;
+  background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;cursor:pointer;text-decoration:none;color:var(--white);flex-shrink:0;
+}
+.topbar h1{font-size:19px;font-weight:800;letter-spacing:-0.3px;}
+
+/* TABS */
+.page-tabs{
+  display:flex;gap:0;background:var(--surface);border-radius:14px;padding:4px;
+  margin:0 22px 22px;
+}
+.ptab{
+  flex:1;padding:10px 6px;text-align:center;border-radius:10px;
+  font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;transition:all 0.2s;
+}
+.ptab.active{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;}
+
+/* SECTION */
+.sec{padding:0 22px;margin-bottom:22px;}
+.sec-title{font-size:15px;font-weight:700;margin-bottom:14px;}
+
+/* SENDER CARD SELECT */
+.card-selector{
+  background:linear-gradient(135deg,#1E3A8A,#312E81);
+  border-radius:20px;padding:20px;margin-bottom:16px;
+  position:relative;overflow:hidden;cursor:pointer;
+  border:2px solid rgba(99,102,241,0.2);
+}
+.card-selector::before{
+  content:'';position:absolute;width:180px;height:180px;
+  border-radius:50%;background:rgba(255,255,255,0.05);
+  top:-60px;right:-40px;
+}
+.cs-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.cs-name{font-size:13px;font-weight:700;opacity:0.7;}
+.cs-arrow{font-size:16px;opacity:0.5;}
+.cs-balance{font-size:24px;font-weight:800;margin-bottom:8px;}
+.cs-num{font-size:13px;letter-spacing:2px;opacity:0.6;}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.stat-box{
+  background:var(--surface);border-radius:18px;padding:16px;
+  border:1px solid var(--border);
+}
+.sb-icon{font-size:22px;margin-bottom:8px;}
+.sb-label{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.8px;}
+.sb-val{font-size:16px;font-weight:800;}
+.sb-val.green{color:var(--green);}
+.sb-val.gold{color:var(--gold);}
+.sb-val.blue{color:var(--accent2);}
+.sb-val.red{color:var(--red);}
+.sb-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* BIG TURNOVER CARD */
+.turnover-card{
+  background:linear-gradient(135deg,#064E3B,#065F46);
+  border-radius:22px;padding:22px;
+  border:1px solid rgba(16,185,129,0.25);
+  margin-bottom:16px;
+}
+.to-label{font-size:12px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;}
+.to-val{font-size:30px;font-weight:800;color:#34D399;margin-bottom:4px;letter-spacing:-0.5px;}
+.to-sub{font-size:12px;color:rgba(255,255,255,0.45);}
+.to-bar-wrap{margin-top:16px;}
+.to-bar-bg{height:6px;border-radius:3px;background:rgba(255,255,255,0.1);}
+.to-bar-fill{height:6px;border-radius:3px;background:linear-gradient(to right,#10B981,#34D399);width:82%;}
+.to-bar-label{display:flex;justify-content:space-between;margin-top:6px;}
+.to-bar-label span{font-size:11px;color:rgba(255,255,255,0.4);}
+
+/* CONTACTS ROW */
+.contacts-row{
+  display:flex;gap:12px;overflow-x:auto;
+  padding-bottom:4px;scrollbar-width:none;
+}
+.contact{display:flex;flex-direction:column;align-items:center;gap:7px;flex-shrink:0;cursor:pointer;}
+.c-av{
+  width:52px;height:52px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:21px;transition:transform 0.15s;
+}
+.c-av:active{transform:scale(0.9);}
+.c-name{font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap;}
+
+/* FORM FIELDS */
+.f-label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;}
+.f-input{
+  width:100%;background:var(--surface);border:1.5px solid var(--border);
+  border-radius:15px;color:var(--white);font-size:15px;
+  font-family:var(--font);padding:15px 17px;outline:none;
+  transition:border-color 0.2s;margin-bottom:14px;
+}
+.f-input:focus{border-color:var(--accent2);}
+.f-input::placeholder{color:rgba(107,135,168,0.5);}
+
+/* AMOUNT BOX */
+.amt-box{
+  background:var(--surface);border-radius:20px;padding:22px;
+  text-align:center;margin-bottom:14px;
+  border:1.5px solid var(--border);
+}
+.amt-box p{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.amt-box input{
+  width:100%;background:transparent;border:none;
+  font-size:38px;font-weight:800;color:var(--white);
+  font-family:var(--font);text-align:center;outline:none;
+}
+.amt-box input::placeholder{color:rgba(239,246,255,0.15);}
+.amt-cur{font-size:13px;color:var(--muted);margin-top:4px;}
+
+/* QUICK AMOUNTS */
+.quick-amts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+.qa{
+  padding:9px 15px;background:rgba(14,165,233,0.12);
+  border:1px solid rgba(14,165,233,0.25);border-radius:10px;
+  font-size:13px;font-weight:700;color:var(--accent2);cursor:pointer;
+  transition:background 0.15s;
+}
+.qa:active{background:rgba(14,165,233,0.25);}
+
+/* SEND BTN */
+.btn-send{
+  width:100%;padding:18px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  border:none;border-radius:17px;color:#fff;
+  font-size:16px;font-weight:800;font-family:var(--font);
+  cursor:pointer;box-shadow:0 10px 30px rgba(37,99,235,0.4);
+  transition:transform 0.15s;display:flex;align-items:center;
+  justify-content:center;gap:10px;
+}
+.btn-send:active{transform:scale(0.97);}
+
+/* TX LIST */
+.tx-item{
+  display:flex;align-items:center;gap:13px;
+  padding:13px 0;border-bottom:1px solid var(--border);cursor:pointer;
+}
+.tx-item:last-child{border-bottom:none;}
+.tx-ico{width:46px;height:46px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;}
+.tx-info{flex:1;min-width:0;}
+.tx-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tx-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.tx-right{text-align:right;flex-shrink:0;}
+.tx-amt{font-size:14px;font-weight:700;}
+.tx-amt.neg{color:var(--red);}
+.tx-amt.pos{color:var(--green);}
+.tx-time{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* TAB PANELS */
+.tpanel{display:none;}
+.tpanel.active{display:block;}
+
+/* BOTTOM NAV */
+.bnav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;z-index:100;
+  background:rgba(7,17,31,0.96);backdrop-filter:blur(24px);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;align-items:center;
+  padding:10px 0 28px;
+}
+@media(max-width:430px){.bnav{left:0;right:0;transform:none;}}
+.bn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px 14px;text-decoration:none;color:var(--muted);transition:color 0.2s;}
+.bn.active{color:var(--accent2);}
+.bn-icon{font-size:22px;}
+.bn-label{font-size:10px;font-weight:700;letter-spacing:0.3px;}
+.bn-center{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;box-shadow:0 8px 24px rgba(37,99,235,0.45);margin-top:-18px;text-decoration:none;color:#fff;}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(7,17,31,0.9);z-index:200;backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;}
+.modal-bg.show{display:flex;}
+.modal-box{background:#0C1929;border-radius:28px;padding:36px 28px;text-align:center;max-width:320px;width:90%;border:1px solid var(--border);animation:popIn 0.35s ease;}
+@keyframes popIn{from{opacity:0;transform:scale(0.82)}to{opacity:1;transform:scale(1)}}
+.mi{font-size:66px;margin-bottom:14px;}
+.modal-box h2{font-size:21px;font-weight:800;margin-bottom:8px;}
+.modal-box p{color:var(--muted);font-size:13px;margin-bottom:24px;line-height:1.7;}
+.modal-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--blue),var(--purple));border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:700;font-family:var(--font);cursor:pointer;text-decoration:none;display:block;}
+
+.fade-in{animation:fi 0.5s ease both;}
+@keyframes fi{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="sbar"><span>9:41</span><span>📶 🔋 92%</span></div>
+
+<div class="page">
+
+  <!-- TOPBAR -->
+  <div class="topbar fade-in">
+    <a href="index.html" class="back">←</a>
+    <h1>O'tkazma va statistika</h1>
+  </div>
+
+  <!-- PAGE TABS -->
+  <div class="page-tabs fade-in">
+    <div class="ptab active" onclick="switchPTab('send')">💸 O'tkazma</div>
+    <div class="ptab" onclick="switchPTab('stats')">📊 Aylanma</div>
+    <div class="ptab" onclick="switchPTab('paid')">✅ To'lovlar</div>
+  </div>
+
+  <!-- ======= TAB: SEND ======= -->
+  <div class="tpanel active" id="tp-send">
+
+    <!-- CARD SELECTOR -->
+    <div class="sec">
+      <div class="sec-title">Qaysi kartadan?</div>
+      <div class="card-selector">
+        <div class="cs-top">
+          <div class="cs-name">SmartBank · VISA •••• 4182</div>
+          <div class="cs-arrow">⌄</div>
+        </div>
+        <div class="cs-balance">91 432 800 UZS</div>
+        <div class="cs-num">Javoxir Sadullayev</div>
+      </div>
+    </div>
+
+    <!-- FREQUENT CONTACTS -->
+    <div class="sec">
+      <div class="sec-title">Tez-tez o'tkazganlar</div>
+      <div class="contacts-row">
+        <div class="contact" onclick="fillContact('Asilbek','8600123456781234')">
+          <div class="c-av" style="background:rgba(37,99,235,0.2);">👨‍💼</div>
+          <div class="c-name">Asilbek</div>
+        </div>
+        <div class="contact" onclick="fillContact('Malika','8600987654321098')">
+          <div class="c-av" style="background:rgba(16,185,129,0.2);">👩</div>
+          <div class="c-name">Malika</div>
+        </div>
+        <div class="contact" onclick="fillContact('Jasur','8600111222333444')">
+          <div class="c-av" style="background:rgba(245,158,11,0.2);">👨</div>
+          <div class="c-name">Jasur</div>
+        </div>
+        <div class="contact" onclick="fillContact('Otam','8600555666777888')">
+          <div class="c-av" style="background:rgba(239,68,68,0.2);">👴</div>
+          <div class="c-name">Otam</div>
+        </div>
+        <div class="contact" onclick="fillContact('Onam','8600444555666777')">
+          <div class="c-av" style="background:rgba(124,58,237,0.2);">👩‍🦱</div>
+          <div class="c-name">Onam</div>
+        </div>
+        <div class="contact">
+          <div class="c-av" style="background:rgba(107,135,168,0.15);font-size:18px;color:var(--muted);">＋</div>
+          <div class="c-name">Yangi</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="sec">
+      <label class="f-label">Qabul qiluvchi karta raqami</label>
+      <input class="f-input" type="text" id="toCard" placeholder="8600 •••• •••• ••••" maxlength="19">
+
+      <label class="f-label">Qabul qiluvchi ismi</label>
+      <input class="f-input" type="text" id="toName" placeholder="Ism Familiya">
+
+      <div class="amt-box">
+        <p>O'tkazma summasi</p>
+        <input type="number" id="sendAmt" placeholder="0" min="1000">
+        <div class="amt-cur">UZS · O'zbekiston so'mi</div>
+      </div>
+
+      <div class="quick-amts">
+        <div class="qa" onclick="setAmt(50000)">50 000</div>
+        <div class="qa" onclick="setAmt(100000)">100 000</div>
+        <div class="qa" onclick="setAmt(500000)">500 000</div>
+        <div class="qa" onclick="setAmt(1000000)">1 000 000</div>
+        <div class="qa" onclick="setAmt(5000000)">5 000 000</div>
+      </div>
+
+      <label class="f-label">Izoh (ixtiyoriy)</label>
+      <input class="f-input" type="text" id="sendNote" placeholder="masalan: qarz qaytarish">
+
+      <button class="btn-send" onclick="doSend()">
+        <span>💸</span>
+        <span>O'tkazishni tasdiqlash</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ======= TAB: STATS ======= -->
+  <div class="tpanel" id="tp-stats">
+    <div class="sec">
+
+      <!-- BIG TURNOVER -->
+      <div class="turnover-card">
+        <div class="to-label">📅 Mart 2026 · Karta aylanmasi</div>
+        <div class="to-val">1 109 727 560 UZS</div>
+        <div class="to-sub">Karta: •••• 4182 · SmartBank VISA</div>
+        <div class="to-bar-wrap">
+          <div class="to-bar-bg"><div class="to-bar-fill"></div></div>
+          <div class="to-bar-label">
+            <span>0 UZS</span>
+            <span>Maqsad: 1.2 mlrd</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS GRID -->
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="sb-icon">📥</div>
+          <div class="sb-label">Jami kirim</div>
+          <div class="sb-val green">+680 500 000</div>
+          <div class="sb-sub">UZS · Mart</div>
+        </div>
+        <div class="stat-box">
+          <div class="sb-icon">📤</div>
+          <div class="sb-label">Jami chiqim</div>
+          <div class="sb-val red">−429 227 560</div>
+          <div class="sb-sub">UZS · Mart</div>
+        </div>
+        <div class="stat-box">
+          <div class="sb-icon">🔄</div>
+          <div class="sb-label">Tranzaksiyalar</div>
+          <div class="sb-val blue">318 ta</div>
+          <div class="sb-sub">Bu oyda</div>
+        </div>
+        <div class="stat-box">
+          <div class="sb-icon">💰</div>
+          <div class="sb-label">Cashback</div>
+          <div class="sb-val gold">+127 400</div>
+          <div class="sb-sub">UZS qaytarildi</div>
+        </div>
+      </div>
+
+      <!-- MONTHLY CHART -->
+      <div style="background:var(--surface);border-radius:20px;padding:20px;border:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <span style="font-size:14px;font-weight:700;">Oylik aylanma</span>
+          <span style="font-size:12px;color:var(--accent2);font-weight:700;">2026</span>
+        </div>
+        <div style="display:flex;gap:6px;align-items:flex-end;height:80px;">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;">
+            <div style="width:100%;height:38px;background:linear-gradient(to top,var(--blue),var(--accent));border-radius:6px;opacity:0.7;"></div>
+            <div style="font-size:9px;color:var(--muted);font-weight:600;">Yan</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;">
+            <div style="width:100%;height:52px;background:linear-gradient(to top,var(--blue),var(--accent));border-radius:6px;opacity:0.8;"></div>
+            <div style="font-size:9px;color:var(--muted);font-weight:600;">Fev</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;">
+            <div style="width:100%;height:72px;background:linear-gradient(to top,var(--blue),var(--accent));border-radius:6px;opacity:1;box-shadow:0 0 14px rgba(14,165,233,0.4);"></div>
+            <div style="font-size:9px;color:var(--accent2);font-weight:700;">Mar</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;">
+            <div style="width:100%;height:18px;background:var(--surface2);border-radius:6px;"></div>
+            <div style="font-size:9px;color:var(--muted);font-weight:600;">Apr</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;">
+            <div style="width:100%;height:12px;background:var(--surface2);border-radius:6px;"></div>
+            <div style="font-size:9px;color:var(--muted);font-weight:600;">May</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;">
+            <div style="width:100%;height:8px;background:var(--surface2);border-radius:6px;"></div>
+            <div style="font-size:9px;color:var(--muted);font-weight:600;">Iyn</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======= TAB: PAID ======= -->
+  <div class="tpanel" id="tp-paid">
+    <div class="sec">
+
+      <!-- SUMMARY -->
+      <div style="background:linear-gradient(135deg,#1E3A8A,#312E81);border-radius:20px;padding:18px 20px;margin-bottom:16px;border:1px solid rgba(99,102,241,0.25);">
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;">Bu oy qilingan to'lovlar</div>
+        <div style="font-size:26px;font-weight:800;color:#93C5FD;margin-bottom:2px;">−4 820 000 UZS</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);">Jami 24 ta to'lov · Mart 2026</div>
+      </div>
+
+      <!-- PAID LIST -->
+      <div style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px;">Mart 2026</div>
+      <div class="tx-item">
+        <div class="tx-ico" style="background:rgba(245,158,11,0.12);">⚡</div>
+        <div class="tx-info"><div class="tx-name">UzbekEnergo · Elektr</div><div class="tx-sub">Hisob: 1234567 · 384 kWt</div></div>
+        <div class="tx-right"><div class="tx-amt neg">−95 000</div><div class="tx-time">14 Mar ✅</div></div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-ico" style="background:rgba(14,165,233,0.12);">🌐</div>
+        <div class="tx-info"><div class="tx-name">Uztelecom · Internet</div><div class="tx-sub">Tarif: 50 Mbps · 1 oy</div></div>
+        <div class="tx-right"><div class="tx-amt neg">−89 000</div><div class="tx-time">10 Mar ✅</div></div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-ico" style="background:rgba(139,92,246,0.12);">📱</div>
+        <div class="tx-info"><div class="tx-name">Ucell · +998 91</div><div class="tx-sub">Tarif: Ultra 30 · Mart</div></div>
+        <div class="tx-right"><div class="tx-amt neg">−50 000</div><div class="tx-time">8 Mar ✅</div></div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-ico" style="background:rgba(14,165,233,0.12);">🏪</div>
+        <div class="tx-info"><div class="tx-name">Korzinka Market</div><div class="tx-sub">Oziq-ovqat · Karta to'lovi</div></div>
+        <div class="tx-right"><div class="tx-amt neg">−285 000</div><div class="tx-time">15 Mar ✅</div></div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-ico" style="background:rgba(244,63,94,0.12);">🚕</div>
+        <div class="tx-info"><div class="tx-name">Yandex Taxi</div><div class="tx-sub">3 ta safar</div></div>
+        <div class="tx-right"><div class="tx-amt neg">−76 000</div><div class="tx-time">13 Mar ✅</div></div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-ico" style="background:rgba(16,185,129,0.12);">💸</div>
+        <div class="tx-info"><div class="tx-name">Asilbekka o'tkazma</div><div class="tx-sub">P2P · SmartBank</div></div>
+        <div class="tx-right"><div class="tx-amt neg">−1 000 000</div><div class="tx-time">12 Mar ✅</div></div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-ico" style="background:rgba(245,158,11,0.12);">📦</div>
+        <div class="tx-info"><div class="tx-name">Uzum Market</div><div class="tx-sub">Online xarid · 2 ta mahsulot</div></div>
+        <div class="tx-right"><div class="tx-amt neg">−450 000</div><div class="tx-time">11 Mar ✅</div></div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-ico" style="background:rgba(14,165,233,0.12);">🍕</div>
+        <div class="tx-info"><div class="tx-name">Evos Burger</div><div class="tx-sub">Ovqat · Oʻrda filiali</div></div>
+        <div class="tx-right"><div class="tx-amt neg">−125 000</div><div class="tx-time">12 Mar ✅</div></div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-ico" style="background:rgba(16,185,129,0.12);">🏋️</div>
+        <div class="tx-info"><div class="tx-name">FitLife Gym</div><div class="tx-sub">Oylik obuna · Mart</div></div>
+        <div class="tx-right"><div class="tx-amt neg">−250 000</div><div class="tx-time">1 Mar ✅</div></div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-ico" style="background:rgba(244,63,94,0.12);">🔥</div>
+        <div class="tx-info"><div class="tx-name">Gaz · Fevral hisobi</div><div class="tx-sub">Hisob: 9876543</div></div>
+        <div class="tx-right"><div class="tx-amt neg">−42 000</div><div class="tx-time">28 Fev ✅</div></div>
+      </div>
+      <div style="text-align:center;padding:14px 0 0;">
+        <span style="font-size:13px;color:var(--accent2);font-weight:700;cursor:pointer;">Barchasini ko'rish →</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end page -->
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <a href="index.html" class="bn">
+    <div class="bn-icon">🏠</div>
+    <div class="bn-label">Asosiy</div>
+  </a>
+  <div class="bn">
+    <div class="bn-icon">💳</div>
+    <div class="bn-label">To'lovlar</div>
+  </div>
+  <a href="transfer.html" class="bn-center">💸</a>
+  <div class="bn">
+    <div class="bn-icon">📋</div>
+    <div class="bn-label">Tarix</div>
+  </div>
+  <div class="bn">
+    <div class="bn-icon">⚙️</div>
+    <div class="bn-label">Xizmatlar</div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-bg" id="successModal">
+  <div class="modal-box">
+    <div class="mi">✅</div>
+    <h2>Muvaffaqiyatli!</h2>
+    <p id="modalMsg">Pul muvaffaqiyatli o'tkazildi!</p>
+    <a href="index.html" class="modal-btn">Bosh sahifaga qaytish</a>
+  </div>
+</div>
+
+<script>
+// PAGE TABS
+function switchPTab(name){
+  document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tp-'+name).classList.add('active');
+  const map={send:0,stats:1,paid:2};
+  document.querySelectorAll('.ptab')[map[name]].classList.add('active');
+}
+
+// FILL CONTACT
+function fillContact(name,card){
+  document.getElementById('toCard').value = card;
+  document.getElementById('toName').value = name;
+}
+
+// SET AMOUNT
+function setAmt(v){
+  document.getElementById('sendAmt').value = v;
+}
+
+// SEND
+function doSend(){
+  const amt = document.getElementById('sendAmt').value;
+  const card = document.getElementById('toCard').value;
+  const name = document.getElementById('toName').value;
+  if(!card){ alert("Karta raqamini kiriting"); return; }
+  if(!amt || amt < 1000){ alert("To'g'ri summa kiriting (min 1 000 UZS)"); return; }
+  const fmt = Number(amt).toLocaleString('ru-RU');
+  document.getElementById('modalMsg').innerHTML =
+    `<strong>${fmt} UZS</strong> muvaffaqiyatli o'tkazildi!<br><span style="color:#6B87A8;font-size:12px;">${name || card}</span>`;
+  document.getElementById('successModal').classList.add('show');
+}
+</script>
+</body>
+</html>
