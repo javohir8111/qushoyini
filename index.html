@@ -4,765 +4,488 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SmartBank</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --bg:#07111F;
-  --bg2:#0C1929;
-  --surface:#0F2035;
-  --surface2:#152840;
-  --border:rgba(255,255,255,0.07);
-  --accent:#0EA5E9;
-  --accent2:#38BDF8;
-  --blue:#2563EB;
-  --purple:#8B5CF6;
-  --green:#10B981;
-  --red:#F43F5E;
-  --gold:#F59E0B;
-  --white:#EFF6FF;
-  --muted:#6B87A8;
-  --muted2:#4A6580;
-  --font:'Plus Jakarta Sans',sans-serif;
+  --bg:#060E1C;
+  --bg2:#0A1628;
+  --s1:#0E1F36;
+  --s2:#132540;
+  --s3:#1A2F4E;
+  --bdr:rgba(255,255,255,0.06);
+  --bdr2:rgba(255,255,255,0.1);
+  --blue:#1D6FEB;
+  --blue2:#3B8BFF;
+  --teal:#0ABFBC;
+  --green:#0ECB81;
+  --red:#F6465D;
+  --gold:#F0B90B;
+  --purple:#9B51E0;
+  --w:#E8F0FE;
+  --w2:#C4D4F0;
+  --muted:#5E7A9E;
+  --muted2:#3A5470;
+  --fn:'Plus Jakarta Sans',sans-serif;
 }
-html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--white);overflow-x:hidden;}
+html,body{min-height:100%;background:var(--bg);font-family:var(--fn);color:var(--w);-webkit-tap-highlight-color:transparent;}
+*{-webkit-tap-highlight-color:transparent;}
+::-webkit-scrollbar{display:none;}
 
-/* SCROLLBAR */
-::-webkit-scrollbar{width:0;height:0;}
+/* ── STATUS BAR ── */
+.sbar{max-width:430px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:14px 20px 0;font-size:12px;font-weight:700;opacity:.6;}
 
-/* STATUS BAR */
-.sbar{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 22px 0;font-size:12px;font-weight:700;
-  max-width:430px;margin:0 auto;opacity:0.7;
-}
+/* ── HEADER ── */
+.hdr{max-width:430px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:12px 20px 0;}
+.hdr-l p{font-size:12.5px;color:var(--muted);font-weight:500;}
+.hdr-l h2{font-size:18px;font-weight:800;margin-top:1px;letter-spacing:-.3px;}
+.hdr-r{display:flex;gap:9px;}
+.ibtn{width:38px;height:38px;border-radius:11px;background:var(--s1);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;position:relative;}
+.ndot{position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--red);border:1.5px solid var(--bg);}
+.ava{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;}
 
-/* HEADER */
-.hdr{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:14px 22px 0;max-width:430px;margin:0 auto;
-}
-.hdr-left p{font-size:13px;color:var(--muted);font-weight:500;}
-.hdr-left h2{font-size:19px;font-weight:800;margin-top:2px;letter-spacing:-0.3px;}
-.hdr-right{display:flex;gap:10px;align-items:center;}
-.icon-btn{
-  width:40px;height:40px;border-radius:12px;
-  background:var(--surface);border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:17px;cursor:pointer;position:relative;
-}
-.notif-dot{
-  position:absolute;top:7px;right:7px;
-  width:7px;height:7px;border-radius:50%;
-  background:#F43F5E;border:1.5px solid var(--bg);
-}
-.avatar{
-  width:40px;height:40px;border-radius:12px;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;font-weight:800;
-}
+/* ── CARDS ── */
+.cards-area{max-width:430px;margin:0 auto;padding:18px 0 0;}
+.cards-track{display:flex;gap:12px;overflow-x:auto;padding:0 20px 4px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
 
-/* CARDS CAROUSEL */
-.cards-wrap{
-  padding:20px 0 0;
-  max-width:430px;margin:0 auto;
-}
-.cards-scroll{
-  display:flex;gap:14px;
-  overflow-x:auto;padding:0 22px 6px;
-  scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;
-}
-.bank-card{
-  min-width:300px;height:172px;border-radius:24px;
-  padding:22px;position:relative;overflow:hidden;
-  scroll-snap-align:start;cursor:pointer;flex-shrink:0;
-  transition:transform 0.2s;
-}
-.bank-card:active{transform:scale(0.97);}
-.bc-main{background:linear-gradient(135deg,#0D2E6B 0%,#1A1550 50%,#0D2E6B 100%);}
-.bc-gold{background:linear-gradient(135deg,#78350F 0%,#92400E 50%,#78350F 100%);}
-.bc-dark{background:linear-gradient(135deg,#111827 0%,#1F2937 50%,#111827 100%);}
-.bank-card::before{
-  content:'';position:absolute;
-  width:220px;height:220px;border-radius:50%;
-  background:rgba(255,255,255,0.05);
-  top:-80px;right:-60px;
-}
-.bank-card::after{
-  content:'';position:absolute;
-  width:140px;height:140px;border-radius:50%;
-  background:rgba(255,255,255,0.04);
-  bottom:-60px;left:-30px;
-}
-.bc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-.bc-name{font-size:14px;font-weight:800;letter-spacing:0.5px;}
-.bc-name span{opacity:0.6;}
-.chip-icon{width:34px;height:26px;border-radius:5px;background:linear-gradient(135deg,#F59E0B,#FDE68A);}
-.bc-balance{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:16px;}
-.bc-bottom{display:flex;justify-content:space-between;align-items:flex-end;}
-.bc-num{font-size:13px;letter-spacing:2.5px;font-weight:600;opacity:0.85;}
-.bc-brand{font-size:18px;font-weight:900;font-style:italic;opacity:0.8;}
-.bc-add{
-  min-width:100px;height:172px;border-radius:24px;
-  border:2px dashed rgba(255,255,255,0.1);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:8px;cursor:pointer;flex-shrink:0;
-  transition:border-color 0.2s;
-}
-.bc-add:active{border-color:var(--accent);}
-.bc-add-icon{font-size:28px;opacity:0.4;}
-.bc-add-text{font-size:12px;color:var(--muted);font-weight:600;}
+.bcard{min-width:290px;height:165px;border-radius:22px;padding:20px;position:relative;overflow:hidden;scroll-snap-align:start;cursor:pointer;flex-shrink:0;transition:transform .18s;}
+.bcard:active{transform:scale(.97);}
+
+/* card 1 – blocked */
+.bc1{background:linear-gradient(140deg,#0D2348 0%,#1A1050 60%,#0D2348 100%);}
+/* card 2 – gold */
+.bc2{background:linear-gradient(140deg,#2D1A00 0%,#4A2C00 55%,#2D1A00 100%);}
+
+.bcard::before{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.04);top:-70px;right:-50px;}
+.bcard::after{content:'';position:absolute;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.03);bottom:-50px;left:-25px;}
+
+.bc-row1{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:auto;}
+.bc-brand-name{font-size:13px;font-weight:800;letter-spacing:.3px;}
+.bc-brand-name span{opacity:.55;}
+.chip{width:32px;height:24px;border-radius:5px;background:linear-gradient(135deg,#c8970a,#f5d060);}
+.chip.grey{background:linear-gradient(135deg,#555,#aaa);}
+
+/* BLOCKED OVERLAY */
+.blk-overlay{position:absolute;inset:0;border-radius:22px;background:rgba(0,0,0,.52);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;backdrop-filter:blur(2px);}
+.blk-icon{font-size:26px;}
+.blk-txt{font-size:12.5px;font-weight:800;color:#FF6B7A;letter-spacing:.3px;}
+.blk-sub{font-size:10.5px;color:rgba(255,255,255,.35);margin-top:1px;}
+
+.bc-mid{position:absolute;left:20px;right:20px;top:50px;}
+.bc-bal-lbl{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px;}
+.bc-bal{font-size:20px;font-weight:800;letter-spacing:-.3px;}
+.bc-bal.blurred{filter:blur(5px);opacity:.5;}
+
+.bc-bot{position:absolute;bottom:18px;left:20px;right:20px;display:flex;justify-content:space-between;align-items:flex-end;}
+.bc-num{font-size:12px;letter-spacing:2.5px;font-weight:600;opacity:.7;}
+.bc-holder{font-size:10px;color:rgba(255,255,255,.4);margin-top:3px;text-transform:uppercase;letter-spacing:.8px;}
+.bc-visa{font-size:17px;font-weight:900;font-style:italic;opacity:.75;}
+.bc-mc{width:34px;height:22px;position:relative;}
+.bc-mc::before,.bc-mc::after{content:'';position:absolute;width:22px;height:22px;border-radius:50%;}
+.bc-mc::before{background:#EB001B;left:0;}
+.bc-mc::after{background:#F79E1B;right:0;mix-blend-mode:multiply;}
+
+/* BLOCKED badge top */
+.blk-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(246,70,93,.18);border:1px solid rgba(246,70,93,.35);border-radius:7px;padding:3px 8px;font-size:10px;font-weight:700;color:#FF8090;}
 
 /* DOTS */
-.card-dots{
-  display:flex;justify-content:center;gap:6px;padding:12px 0 0;
-}
-.dot{width:6px;height:6px;border-radius:3px;background:var(--muted2);transition:all 0.3s;}
-.dot.active{width:20px;background:var(--accent);}
+.cdots{display:flex;justify-content:center;gap:5px;padding:10px 0 0;}
+.cdot{width:5px;height:5px;border-radius:3px;background:var(--muted2);transition:all .3s;}
+.cdot.on{width:18px;background:var(--blue2);}
 
-/* QUICK ACTIONS */
-.section{padding:22px 22px 0;max-width:430px;margin:0 auto;}
-.sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
-.sec-title{font-size:15px;font-weight:700;}
-.sec-more{font-size:12px;color:var(--accent2);font-weight:600;cursor:pointer;}
+/* ── CASHBACK ── */
+.cbox{max-width:430px;margin:0 auto;padding:16px 20px 0;}
+.cinner{background:linear-gradient(135deg,#063325,#084D35);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;border:1px solid rgba(14,203,129,.18);cursor:pointer;}
+.ci-ico{font-size:30px;flex-shrink:0;}
+.ci-info{}
+.ci-lbl{font-size:11px;color:rgba(255,255,255,.45);margin-bottom:3px;}
+.ci-val{font-size:18px;font-weight:800;color:#2ECC71;}
+.ci-sub{font-size:10.5px;color:rgba(255,255,255,.35);margin-top:2px;}
+.ci-arr{font-size:18px;color:var(--muted2);margin-left:auto;}
 
-.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.qb{
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  background:var(--surface);border-radius:18px;padding:14px 6px;
-  border:1px solid var(--border);cursor:pointer;
-  transition:transform 0.15s,background 0.15s;
-  text-decoration:none;color:var(--white);
-}
-.qb:active{transform:scale(0.94);background:var(--surface2);}
-.qb-icon{
-  width:46px;height:46px;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;font-size:21px;
-}
-.qb-label{font-size:10.5px;font-weight:600;color:var(--muted);text-align:center;line-height:1.3;}
+/* ── QUICK ACTIONS ── */
+.sec{max-width:430px;margin:0 auto;padding:18px 20px 0;}
+.shtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px;}
+.shtit{font-size:14.5px;font-weight:700;}
+.shmore{font-size:12px;color:var(--blue2);font-weight:600;cursor:pointer;}
 
-/* TABS */
-.tabs-wrap{
-  display:flex;gap:0;
-  background:var(--surface);border-radius:14px;padding:4px;
-  margin-bottom:16px;
-}
-.tab{
-  flex:1;padding:9px 6px;text-align:center;border-radius:10px;
-  font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;
-  transition:all 0.2s;
-}
-.tab.active{background:var(--accent);color:#fff;}
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;}
+.qb{display:flex;flex-direction:column;align-items:center;gap:7px;background:var(--s1);border-radius:16px;padding:13px 5px;border:1px solid var(--bdr);cursor:pointer;transition:transform .15s,background .15s;text-decoration:none;color:var(--w);}
+.qb:active{transform:scale(.93);background:var(--s2);}
+.qbi{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.qbl{font-size:10px;font-weight:600;color:var(--muted);text-align:center;line-height:1.3;}
 
-/* TRANSACTION LIST */
-.tx-list{}
-.tx-item{
-  display:flex;align-items:center;gap:13px;
-  padding:13px 0;border-bottom:1px solid var(--border);
-  cursor:pointer;
-}
-.tx-item:last-child{border-bottom:none;}
-.tx-ico{
-  width:46px;height:46px;border-radius:15px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:21px;flex-shrink:0;
-}
-.tx-info{flex:1;min-width:0;}
-.tx-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.tx-sub{font-size:12px;color:var(--muted);margin-top:2px;}
-.tx-right{text-align:right;flex-shrink:0;}
-.tx-amt{font-size:14px;font-weight:700;}
-.tx-amt.neg{color:var(--red);}
-.tx-amt.pos{color:var(--green);}
-.tx-time{font-size:11px;color:var(--muted);margin-top:2px;}
+/* ── PROMO ── */
+.promo{background:linear-gradient(135deg,#0D2260,#251060);border-radius:18px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(61,97,255,.25);cursor:pointer;}
+.pr-l p{font-size:10.5px;color:rgba(255,255,255,.45);margin-bottom:3px;}
+.pr-l h3{font-size:15px;font-weight:800;}
+.pr-l span{font-size:11px;color:#93C5FD;display:block;margin-top:2px;}
+.pr-r{font-size:34px;}
 
-/* SERVICES GRID */
-.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.svc-card{
-  background:var(--surface);border-radius:18px;padding:16px 12px;
-  border:1px solid var(--border);cursor:pointer;text-align:center;
-  transition:transform 0.15s;
-}
-.svc-card:active{transform:scale(0.94);}
-.svc-icon{font-size:28px;margin-bottom:8px;}
-.svc-name{font-size:11px;font-weight:600;color:var(--muted);line-height:1.3;}
+/* ── TABS ── */
+.tabbar{display:flex;gap:0;background:var(--s1);border-radius:13px;padding:3px;margin-bottom:14px;}
+.tab{flex:1;padding:9px 4px;text-align:center;border-radius:10px;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.tab.on{background:var(--blue);color:#fff;}
 
-/* CASHBACK */
-.cashback-card{
-  background:linear-gradient(135deg,#064E3B,#065F46);
-  border-radius:20px;padding:20px;
-  display:flex;align-items:center;gap:16px;
-  border:1px solid rgba(16,185,129,0.2);
-  margin-bottom:10px;cursor:pointer;
-}
-.cb-icon{font-size:36px;flex-shrink:0;}
-.cb-info{}
-.cb-label{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:4px;}
-.cb-val{font-size:22px;font-weight:800;color:#34D399;}
-.cb-sub{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;}
+.tpanel{display:none;}
+.tpanel.on{display:block;}
 
-/* BOTTOM NAV */
-.bnav{
-  position:fixed;bottom:0;left:0;right:0;z-index:100;
-  background:rgba(7,17,31,0.96);backdrop-filter:blur(24px);
-  border-top:1px solid var(--border);
-  display:flex;justify-content:space-around;align-items:center;
-  padding:10px 0 28px;
-  max-width:430px;margin:0 auto;
-  left:50%;transform:translateX(-50%);
-}
+/* ── TX LIST ── */
+.txlist{}
+.txi{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bdr);}
+.txi:last-child{border-bottom:none;}
+.txico{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.txinfo{flex:1;min-width:0;}
+.txn{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.txs{font-size:11.5px;color:var(--muted);margin-top:1.5px;}
+.txr{text-align:right;flex-shrink:0;}
+.txa{font-size:13.5px;font-weight:700;}
+.txa.m{color:var(--red);}
+.txa.p{color:var(--green);}
+.txt{font-size:10.5px;color:var(--muted);margin-top:1.5px;}
+
+/* ── STAT BARS ── */
+.statcard{background:var(--s1);border-radius:18px;padding:16px;border:1px solid var(--bdr);margin-bottom:10px;}
+.strow{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.sttit{font-size:13px;color:var(--muted);font-weight:600;}
+.stval{font-size:13px;font-weight:700;color:var(--red);}
+.bars{display:flex;gap:5px;align-items:flex-end;height:46px;}
+.bwrap{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;}
+.bbar{width:100%;border-radius:5px;}
+.blab{font-size:8.5px;color:var(--muted2);font-weight:600;}
+
+/* ── SERVICES ── */
+.svgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.svc{background:var(--s1);border-radius:16px;padding:15px 10px;border:1px solid var(--bdr);cursor:pointer;text-align:center;transition:transform .15s;}
+.svc:active{transform:scale(.93);}
+.svico{font-size:26px;margin-bottom:7px;}
+.svlbl{font-size:10.5px;font-weight:600;color:var(--muted);line-height:1.3;}
+
+/* ── BOTTOM NAV ── */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:100;background:rgba(6,14,28,.97);backdrop-filter:blur(24px);border-top:1px solid var(--bdr);display:flex;justify-content:space-around;align-items:center;padding:10px 0 26px;}
 @media(max-width:430px){.bnav{left:0;right:0;transform:none;}}
-.bn{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  cursor:pointer;padding:6px 14px;
-  text-decoration:none;color:var(--muted);
-  transition:color 0.2s;
-}
-.bn.active{color:var(--accent2);}
-.bn-icon{font-size:22px;}
-.bn-label{font-size:10px;font-weight:700;letter-spacing:0.3px;}
-.bn-center{
-  width:52px;height:52px;border-radius:16px;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  display:flex;align-items:center;justify-content:center;
-  font-size:26px;cursor:pointer;
-  box-shadow:0 8px 24px rgba(37,99,235,0.45);
-  margin-top:-18px;
-  text-decoration:none;color:#fff;
-}
+.bn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:5px 12px;text-decoration:none;color:var(--muted);transition:color .2s;}
+.bn.on{color:var(--blue2);}
+.bni{font-size:21px;}
+.bnl{font-size:9.5px;font-weight:700;letter-spacing:.2px;}
+.bnctr{width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;box-shadow:0 8px 22px rgba(29,111,235,.45);margin-top:-17px;text-decoration:none;color:#fff;}
 
-.pb{padding-bottom:110px;}
+/* ── PAYMENT MODAL ── */
+.mover{position:fixed;inset:0;background:rgba(6,14,28,.88);z-index:200;backdrop-filter:blur(12px);display:none;align-items:flex-end;justify-content:center;}
+.mover.sh{display:flex;}
+.mbox{background:#0B1D35;border-radius:26px 26px 0 0;padding:24px 22px 44px;width:100%;max-width:430px;animation:slideUp .28s ease;}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mpull{width:38px;height:4px;border-radius:2px;background:var(--bdr2);margin:0 auto 20px;}
+.mtit{font-size:17px;font-weight:800;margin-bottom:4px;}
+.msub{font-size:12.5px;color:var(--muted);margin-bottom:20px;}
+.minp{width:100%;background:var(--s1);border:1.5px solid var(--bdr);border-radius:13px;color:var(--w);font-size:14.5px;font-family:var(--fn);padding:14px 15px;outline:none;transition:border-color .2s;margin-bottom:10px;}
+.minp:focus{border-color:var(--blue2);}
+.minp::placeholder{color:rgba(94,122,158,.5);}
+.mbtn{width:100%;padding:16px;background:linear-gradient(135deg,var(--blue),var(--purple));border:none;border-radius:13px;color:#fff;font-size:15px;font-weight:700;font-family:var(--fn);cursor:pointer;margin-bottom:8px;}
+.mcncl{width:100%;padding:13px;background:transparent;border:1.5px solid var(--bdr);border-radius:13px;color:var(--muted);font-size:13.5px;font-weight:600;font-family:var(--fn);cursor:pointer;}
 
-/* TAB PANELS */
-.tab-panel{display:none;}
-.tab-panel.active{display:block;}
+/* ── TOAST ── */
+.toast{position:fixed;top:58px;left:50%;transform:translateX(-50%);background:#0ECB81;color:#fff;padding:12px 22px;border-radius:14px;font-size:13px;font-weight:700;z-index:300;display:none;white-space:nowrap;box-shadow:0 8px 22px rgba(14,203,129,.4);}
 
-/* ANIMATION */
-.fade-in{animation:fi 0.5s ease both;}
-@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.pb{padding-bottom:105px;}
+.fi{animation:fi .45s ease both;}
+@keyframes fi{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
-.card-scroll-dots{
-  display:flex;justify-content:center;gap:5px;padding:10px 0 0;
-}
-
-/* PROMO BANNER */
-.promo{
-  background:linear-gradient(135deg,#1E3A8A,#312E81);
-  border-radius:20px;padding:18px 20px;
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:14px;cursor:pointer;
-  border:1px solid rgba(99,102,241,0.3);
-}
-.promo-left p{font-size:11px;color:rgba(255,255,255,0.55);margin-bottom:4px;}
-.promo-left h3{font-size:16px;font-weight:800;}
-.promo-left span{font-size:12px;color:#93C5FD;display:block;margin-top:3px;}
-.promo-right{font-size:38px;}
-
-/* MONTH STAT */
-.mstat{
-  background:var(--surface);border-radius:20px;padding:18px;
-  border:1px solid var(--border);margin-bottom:10px;
-}
-.mstat-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.mstat-title{font-size:13px;color:var(--muted);font-weight:600;}
-.mstat-bars{display:flex;gap:6px;align-items:flex-end;height:50px;}
-.bar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
-.bar{width:100%;border-radius:6px;background:var(--surface2);}
-.bar.filled{background:linear-gradient(to top,var(--blue),var(--accent));}
-.bar-label{font-size:9px;color:var(--muted2);font-weight:600;}
+/* month separator */
+.msep{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;padding:14px 0 10px;}
 </style>
 </head>
 <body>
 
-<!-- STATUS BAR -->
+
 <!-- HEADER -->
-<div class="hdr fade-in">
-  <div class="hdr-left">
-    <p>Salom, 👋</p>
+<div class="hdr fi">
+  <div class="hdr-l">
+    <p>Assalomu alaykum 👋</p>
     <h2>Javoxir Sadullayev</h2>
   </div>
-  <div class="hdr-right">
-    <div class="icon-btn">🔔<div class="notif-dot"></div></div>
-    <div class="avatar">JS</div>
+  <div class="hdr-r">
+    <div class="ibtn">🔔<div class="ndot"></div></div>
+    <div class="ava">JS</div>
   </div>
 </div>
 
-<!-- CARDS CAROUSEL -->
-<div class="cards-wrap fade-in">
-  <div class="cards-scroll" id="cardsScroll">
+<!-- CARDS -->
+<div class="cards-area fi">
+  <div class="cards-track" id="ctrack">
 
-    <!-- CARD 1 - MAIN (BLOCKED) -->
-    <div class="bank-card bc-main" onclick="selectCard(0)" style="position:relative;">
-      <div class="bc-top">
-        <div class="bc-name">Smart<span>Bank</span></div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div style="background:rgba(244,63,94,0.25);border:1px solid rgba(244,63,94,0.5);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:#F87171;letter-spacing:0.5px;">Bloklangan</div>
-          <div class="chip-icon"></div>
-        </div>
-      </div>
-      <div class="bc-balance" style="opacity:0.5;text-decoration:line-through;text-decoration-color:rgba(244,63,94,0.6);">91 432 800 UZS</div>
-      <div class="bc-bottom">
+    <!-- CARD 1: 4182 BLOCKED -->
+    <div class="bcard bc1" onclick="goCard('4182')" id="card4182">
+      <div class="bc-row1" style="position:relative;z-index:2;">
         <div>
-          <div class="bc-num">•••• •••• •••• 4182</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:5px;text-transform:uppercase;letter-spacing:1px;">Javoxir Sadullayev</div>
+          <div class="bc-brand-name">Smart<span>Bank</span></div>
+          <div style="margin-top:6px;"><span class="blk-badge"> Bloklangan</span></div>
         </div>
-        <div class="bc-brand">VISA</div>
+        <div class="chip grey"></div>
       </div>
-      <div style="position:absolute;inset:0;border-radius:24px;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(1px);">
-        <div style="text-align:center;">
-          <div style="font-size:30px;">🔒</div>
-          <div style="font-size:13px;font-weight:700;color:#F87171;margin-top:4px;">Karta bloklangan</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Blokdan chiqarish uchun bog'laning</div>
+      <div class="bc-mid" style="z-index:2;position:absolute;">
+        <div class="bc-bal-lbl">Balans</div>
+        <div class="bc-bal blurred">91 432 800 so'm</div>
+      </div>
+      <div class="bc-bot" style="z-index:2;">
+        <div>
+          <div class="bc-num">•••• •••• •••• 1701</div>
+          <div class="bc-holder">Javoxir Sadullayev</div>
         </div>
+        <div class="bc-visa">VISA</div>
+      </div>
+      <!-- dark overlay -->
+      <div class="blk-overlay">
+        <div class="blk-icon"></div>
+        <div class="blk-txt">Karta bloklangan</div>
+        <div class="blk-sub">Batafsil ma'lumot uchun bosing</div>
       </div>
     </div>
 
-    <!-- CARD 2 - GOLD -->
-    <div class="bank-card bc-gold" onclick="selectCard(1)">
-      <div class="bc-top">
-        <div class="bc-name">Smart<span>Gold</span></div>
-        <div class="chip-icon"></div>
+    <!-- CARD 2: SmartGold 7741 -->
+    <div class="bcard bc2" onclick="goCard('7741')" id="card7741">
+      <div class="bc-row1" style="position:relative;z-index:1;">
+        <div class="bc-brand-name" style="color:#FCD34D;">Smart<span style="opacity:.6;color:#FCD34D;">Gold</span></div>
+        <div class="chip"></div>
       </div>
-      <div class="bc-balance">5 280 000 UZS</div>
-      <div class="bc-bottom">
+      <div class="bc-mid">
+        <div class="bc-bal-lbl" style="color:rgba(252,211,77,.5);">Balans</div>
+        <div class="bc-bal" style="color:#FCD34D;">680 so'm</div>
+      </div>
+      <div class="bc-bot">
         <div>
-          <div class="bc-num">•••• •••• •••• 7741</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:5px;text-transform:uppercase;letter-spacing:1px;">Javoxir Sadullayev</div>
+          <div class="bc-num" style="color:rgba(252,211,77,.65);">•••• •••• •••• 7741</div>
+          <div class="bc-holder" style="color:rgba(252,211,77,.4);">Javoxir Sadullayev</div>
         </div>
-        <div class="bc-brand" style="color:#FCD34D;">VISA</div>
+        <div class="bc-visa" style="color:#FCD34D;">VISA</div>
       </div>
-    </div>
-
-    <!-- CARD 3 - DARK -->
-    <div class="bank-card bc-dark" onclick="selectCard(2)">
-      <div class="bc-top">
-        <div class="bc-name">Smart<span>Pay</span></div>
-        <div class="chip-icon" style="background:linear-gradient(135deg,#6B7280,#D1D5DB);"></div>
-      </div>
-      <div class="bc-balance">12 000 000 UZS</div>
-      <div class="bc-bottom">
-        <div>
-          <div class="bc-num">•••• •••• •••• 3309</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:5px;text-transform:uppercase;letter-spacing:1px;">Javoxir Sadullayev</div>
-        </div>
-        <div class="bc-brand">MC</div>
-      </div>
-    </div>
-
-    <!-- ADD CARD -->
-    <div class="bc-add">
-      <div class="bc-add-icon">＋</div>
-      <div class="bc-add-text">Karta qo'shish</div>
     </div>
 
   </div>
 
-  <!-- DOTS -->
-  <div class="card-scroll-dots" id="cardDots">
-    <div class="dot active" id="dot0"></div>
-    <div class="dot" id="dot1"></div>
-    <div class="dot" id="dot2"></div>
+  <div class="cdots">
+    <div class="cdot on" id="d0"></div>
+    <div class="cdot" id="d1"></div>
   </div>
 </div>
 
-<!-- CASHBACK BLOCK -->
-<div class="section fade-in" style="padding-top:20px;">
-  <div class="cashback-card">
-    <div class="cb-icon">💰</div>
-    <div class="cb-info">
-      <div class="cb-label">Bu oylik cashback</div>
-      <div class="cb-val">+127 400 UZS</div>
-      <div class="cb-sub">Jami 3.2% cashback olindi</div>
+<!-- CASHBACK -->
+<div class="cbox fi">
+  <div class="cinner">
+    <div class="ci-ico">💰</div>
+    <div class="ci-info">
+      <div class="ci-lbl">Bu oylik cashback</div>
+      <div class="ci-val">+127 400 UZS</div>
+      <div class="ci-sub">Jami 3.2% qaytarildi · Mart 2026</div>
     </div>
-    <div style="font-size:20px;color:rgba(255,255,255,0.3);">›</div>
+    <div class="ci-arr">›</div>
   </div>
 </div>
 
 <!-- QUICK ACTIONS -->
-<div class="section fade-in">
-  <div class="sec-head">
-    <div class="sec-title">Tezkor amallar</div>
-  </div>
-  <div class="quick-grid">
+<div class="sec fi">
+  <div class="shtop"><div class="shtit">Tezkor amallar</div></div>
+  <div class="qgrid">
     <a href="transfer.html" class="qb">
-      <div class="qb-icon" style="background:rgba(37,99,235,0.2);">💸</div>
-      <div class="qb-label">O'tkazma</div>
+      <div class="qbi" style="background:rgba(29,111,235,.18);">💸</div>
+      <div class="qbl">O'tkazma</div>
     </a>
     <div class="qb">
-      <div class="qb-icon" style="background:rgba(16,185,129,0.2);">📥</div>
-      <div class="qb-label">Qabul qilish</div>
+      <div class="qbi" style="background:rgba(14,203,129,.15);">📥</div>
+      <div class="qbl">Qabul</div>
     </div>
-    <div class="qb" onclick="switchTab('payments')">
-      <div class="qb-icon" style="background:rgba(245,158,11,0.2);">📱</div>
-      <div class="qb-label">To'lov</div>
+    <div class="qb" onclick="showTab('payments')">
+      <div class="qbi" style="background:rgba(240,185,11,.15);">📱</div>
+      <div class="qbl">To'lov</div>
     </div>
-    <div class="qb" onclick="switchTab('services')">
-      <div class="qb-icon" style="background:rgba(139,92,246,0.2);">🛠️</div>
-      <div class="qb-label">Xizmatlar</div>
+    <div class="qb" onclick="showTab('services')">
+      <div class="qbi" style="background:rgba(155,81,224,.18);">🛠️</div>
+      <div class="qbl">Xizmatlar</div>
     </div>
   </div>
 </div>
 
 <!-- PROMO -->
-<div class="section fade-in" style="padding-top:20px;">
+<div class="sec fi" style="padding-top:16px;">
   <div class="promo">
-    <div class="promo-left">
-      <p>SmartBank Premium</p>
+    <div class="pr-l">
+      <p>SmartBank Premium taklifi</p>
       <h3>0% komissiya</h3>
       <span>Barcha o'tkazmalarda →</span>
     </div>
-    <div class="promo-right">🎯</div>
+    <div class="pr-r">🎯</div>
   </div>
 </div>
 
-<!-- TABS SECTION -->
-<div class="section pb fade-in">
-  <div class="tabs-wrap" id="mainTabs">
-    <div class="tab active" onclick="switchTab('transactions')">Tranzaksiyalar</div>
-    <div class="tab" onclick="switchTab('payments')">To'lovlar</div>
-    <div class="tab" onclick="switchTab('history')">Tarix</div>
-    <div class="tab" onclick="switchTab('services')">Xizmatlar</div>
+<!-- TABS + PANELS -->
+<div class="sec pb fi" style="padding-top:18px;">
+  <div class="tabbar" id="tabbar">
+    <div class="tab on" onclick="showTab('transactions')">Harakatlar</div>
+    <div class="tab" onclick="showTab('payments')">To'lovlar</div>
+    <div class="tab" onclick="showTab('history')">Tarix</div>
+    <div class="tab" onclick="showTab('services')">Xizmatlar</div>
   </div>
 
-  <!-- TAB: TRANSACTIONS -->
-  <div class="tab-panel active" id="panel-transactions">
-    <div class="mstat">
-      <div class="mstat-row">
-        <span class="mstat-title">Oylik xarajat</span>
-        <span style="font-size:13px;font-weight:700;color:var(--red);">−4 820 000 UZS</span>
+  <!-- TRANSACTIONS -->
+  <div class="tpanel on" id="tp-transactions">
+    <div class="statcard">
+      <div class="strow">
+        <span class="sttit">Mart 2026 xarajat</span>
+        <span class="stval">−4 820 000 UZS</span>
       </div>
-      <div class="mstat-bars">
-        <div class="bar-wrap"><div class="bar filled" style="height:28px;"></div><div class="bar-label">Yan</div></div>
-        <div class="bar-wrap"><div class="bar filled" style="height:35px;"></div><div class="bar-label">Fev</div></div>
-        <div class="bar-wrap"><div class="bar filled" style="height:42px;"></div><div class="bar-label">Mar</div></div>
-        <div class="bar-wrap"><div class="bar" style="height:20px;"></div><div class="bar-label">Apr</div></div>
-        <div class="bar-wrap"><div class="bar" style="height:16px;"></div><div class="bar-label">May</div></div>
-        <div class="bar-wrap"><div class="bar" style="height:10px;"></div><div class="bar-label">Iyn</div></div>
+      <div class="bars">
+        <div class="bwrap"><div class="bbar" style="height:32px;background:linear-gradient(to top,var(--blue),var(--blue2));border-radius:5px;opacity:.65;"></div><div class="blab">Yan</div></div>
+        <div class="bwrap"><div class="bbar" style="height:42px;background:linear-gradient(to top,var(--blue),var(--blue2));border-radius:5px;opacity:.75;"></div><div class="blab">Fev</div></div>
+        <div class="bwrap"><div class="bbar" style="height:44px;background:linear-gradient(to top,var(--blue),var(--blue2));border-radius:5px;box-shadow:0 0 12px rgba(59,139,255,.35);"></div><div class="blab" style="color:var(--blue2);font-weight:800;">Mar</div></div>
+        <div class="bwrap"><div class="bbar" style="height:14px;background:var(--s2);border-radius:5px;"></div><div class="blab">Apr</div></div>
+        <div class="bwrap"><div class="bbar" style="height:9px;background:var(--s2);border-radius:5px;"></div><div class="blab">May</div></div>
+        <div class="bwrap"><div class="bbar" style="height:6px;background:var(--s2);border-radius:5px;"></div><div class="blab">Iyn</div></div>
       </div>
     </div>
-
-    <div class="tx-list">
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(16,185,129,0.12);">💼</div>
-        <div class="tx-info"><div class="tx-name">Ish haqi</div><div class="tx-sub">SmartBank · Mart</div></div>
-        <div class="tx-right"><div class="tx-amt pos">+12 500 000</div><div class="tx-time">Bugun 09:00</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(14,165,233,0.12);">🏪</div>
-        <div class="tx-info"><div class="tx-name">Korzinka Market</div><div class="tx-sub">Do'kon · Oziq-ovqat</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−285 000</div><div class="tx-time">Bugun 12:40</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(245,158,11,0.12);">⚡</div>
-        <div class="tx-info"><div class="tx-name">UzbekEnergo</div><div class="tx-sub">Kommunal · Elektr</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−95 000</div><div class="tx-time">Kecha 20:10</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(139,92,246,0.12);">📲</div>
-        <div class="tx-info"><div class="tx-name">Ucell to'lovi</div><div class="tx-sub">Telefon · +998 91 xxx</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−50 000</div><div class="tx-time">14 Mar 14:30</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(16,185,129,0.12);">📨</div>
-        <div class="tx-info"><div class="tx-name">Asilbekdan o'tkazma</div><div class="tx-sub">P2P · SmartBank</div></div>
-        <div class="tx-right"><div class="tx-amt pos">+3 000 000</div><div class="tx-time">13 Mar 17:05</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(244,63,94,0.12);">🚕</div>
-        <div class="tx-info"><div class="tx-name">Yandex Taxi</div><div class="tx-sub">Transport</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−38 000</div><div class="tx-time">13 Mar 09:20</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(14,165,233,0.12);">🍕</div>
-        <div class="tx-info"><div class="tx-name">Evos Burger</div><div class="tx-sub">Ovqat · Toshkent</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−125 000</div><div class="tx-time">12 Mar 19:45</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(245,158,11,0.12);">📦</div>
-        <div class="tx-info"><div class="tx-name">Uzum Market</div><div class="tx-sub">Online xarid</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−450 000</div><div class="tx-time">11 Mar 10:00</div></div>
-      </div>
+    <div class="txlist">
+      <div class="txi"><div class="txico" style="background:rgba(14,203,129,.12);">💼</div><div class="txinfo"><div class="txn">Ish haqi</div><div class="txs">SmartBank · Mart 2026</div></div><div class="txr"><div class="txa p">+12 500 000</div><div class="txt">Bugun 09:00</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(59,139,255,.12);">🏪</div><div class="txinfo"><div class="txn">Korzinka Market</div><div class="txs">Do'kon · Oziq-ovqat</div></div><div class="txr"><div class="txa m">−285 000</div><div class="txt">Bugun 12:40</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(240,185,11,.12);">⚡</div><div class="txinfo"><div class="txn">UzbekEnergo</div><div class="txs">Kommunal · Elektr</div></div><div class="txr"><div class="txa m">−95 000</div><div class="txt">Kecha 20:10</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(155,81,224,.12);">📲</div><div class="txinfo"><div class="txn">Ucell to'lovi</div><div class="txs">Telefon · +998 91 ×××</div></div><div class="txr"><div class="txa m">−50 000</div><div class="txt">14 Mar 14:30</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(14,203,129,.12);">📨</div><div class="txinfo"><div class="txn">Asilbekdan o'tkazma</div><div class="txs">P2P · SmartBank</div></div><div class="txr"><div class="txa p">+3 000 000</div><div class="txt">13 Mar 17:05</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(246,70,93,.12);">🚕</div><div class="txinfo"><div class="txn">Yandex Taxi</div><div class="txs">Transport · 2 ta safar</div></div><div class="txr"><div class="txa m">−38 000</div><div class="txt">13 Mar 09:20</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(59,139,255,.12);">🍕</div><div class="txinfo"><div class="txn">Evos Burger</div><div class="txs">Ovqat · Toshkent</div></div><div class="txr"><div class="txa m">−125 000</div><div class="txt">12 Mar 19:45</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(240,185,11,.12);">📦</div><div class="txinfo"><div class="txn">Uzum Market</div><div class="txs">Online xarid</div></div><div class="txr"><div class="txa m">−450 000</div><div class="txt">11 Mar 10:00</div></div></div>
     </div>
   </div>
 
-  <!-- TAB: PAYMENTS -->
-  <div class="tab-panel" id="panel-payments">
-    <div class="sec-head" style="margin-bottom:16px;">
-      <div class="sec-title">Kommunal to'lovlar</div>
+  <!-- PAYMENTS -->
+  <div class="tpanel" id="tp-payments">
+    <div class="shtop" style="margin-bottom:13px;"><div class="shtit">Kommunal to'lovlar</div></div>
+    <div class="svgrid" style="margin-bottom:20px;">
+      <div class="svc" onclick="openPay('Elektr energiya')"><div class="svico">⚡</div><div class="svlbl">Elektr energiya</div></div>
+      <div class="svc" onclick="openPay('Gaz to\'lovi')"><div class="svico">🔥</div><div class="svlbl">Gaz to'lovi</div></div>
+      <div class="svc" onclick="openPay('Suv ta\'minoti')"><div class="svico">💧</div><div class="svlbl">Suv ta'minoti</div></div>
+      <div class="svc" onclick="openPay('Internet')"><div class="svico">🌐</div><div class="svlbl">Internet</div></div>
+      <div class="svc" onclick="openPay('Mobil to\'lov')"><div class="svico">📱</div><div class="svlbl">Mobil to'lov</div></div>
+      <div class="svc" onclick="openPay('Kabel TV')"><div class="svico">📺</div><div class="svlbl">Kabel TV</div></div>
     </div>
-    <div class="services-grid" style="margin-bottom:20px;">
-      <div class="svc-card" onclick="openPayment('Elektr')">
-        <div class="svc-icon">⚡</div>
-        <div class="svc-name">Elektr energiya</div>
-      </div>
-      <div class="svc-card" onclick="openPayment('Gaz')">
-        <div class="svc-icon">🔥</div>
-        <div class="svc-name">Gaz to'lovi</div>
-      </div>
-      <div class="svc-card" onclick="openPayment('Suv')">
-        <div class="svc-icon">💧</div>
-        <div class="svc-name">Suv ta'minoti</div>
-      </div>
-      <div class="svc-card" onclick="openPayment('Internet')">
-        <div class="svc-icon">🌐</div>
-        <div class="svc-name">Internet</div>
-      </div>
-      <div class="svc-card" onclick="openPayment('Telefon')">
-        <div class="svc-icon">📱</div>
-        <div class="svc-name">Mobil to'lov</div>
-      </div>
-      <div class="svc-card" onclick="openPayment('TV')">
-        <div class="svc-icon">📺</div>
-        <div class="svc-name">Kabel TV</div>
-      </div>
-    </div>
-    <div class="sec-head" style="margin-bottom:16px;">
-      <div class="sec-title">So'nggi to'lovlar</div>
-    </div>
-    <div class="tx-list">
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(245,158,11,0.12);">⚡</div>
-        <div class="tx-info"><div class="tx-name">Elektr · Mart</div><div class="tx-sub">Hisob: 1234567 · 384 kWt</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−95 000</div><div class="tx-time">14 Mar</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(14,165,233,0.12);">🌐</div>
-        <div class="tx-info"><div class="tx-name">Uztelecom · Internet</div><div class="tx-sub">Tarif: 50 Mbps</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−89 000</div><div class="tx-time">10 Mar</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(139,92,246,0.12);">📱</div>
-        <div class="tx-info"><div class="tx-name">Ucell · +998 91</div><div class="tx-sub">Tarif: Ultra 30</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−50 000</div><div class="tx-time">8 Mar</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(16,185,129,0.12);">🔥</div>
-        <div class="tx-info"><div class="tx-name">Gaz · Fevral</div><div class="tx-sub">Hisob: 9876543</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−42 000</div><div class="tx-time">28 Fev</div></div>
-      </div>
+    <div class="shtop" style="margin-bottom:12px;"><div class="shtit">So'nggi to'lovlar</div></div>
+    <div class="txlist">
+      <div class="txi"><div class="txico" style="background:rgba(240,185,11,.12);">⚡</div><div class="txinfo"><div class="txn">Elektr · Mart</div><div class="txs">Hisob: 1234567 · 384 kWt</div></div><div class="txr"><div class="txa m">−95 000</div><div class="txt">14 Mar ✓</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(59,139,255,.12);">🌐</div><div class="txinfo"><div class="txn">Uztelecom Internet</div><div class="txs">Tarif: 50 Mbps · 1 oy</div></div><div class="txr"><div class="txa m">−89 000</div><div class="txt">10 Mar ✓</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(155,81,224,.12);">📱</div><div class="txinfo"><div class="txn">Ucell · +998 91 ×××</div><div class="txs">Tarif: Ultra 30</div></div><div class="txr"><div class="txa m">−50 000</div><div class="txt">8 Mar ✓</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(14,203,129,.12);">🔥</div><div class="txinfo"><div class="txn">Gaz · Fevral</div><div class="txs">Hisob: 9876543</div></div><div class="txr"><div class="txa m">−42 000</div><div class="txt">28 Fev ✓</div></div></div>
     </div>
   </div>
 
-  <!-- TAB: HISTORY -->
-  <div class="tab-panel" id="panel-history">
-    <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;">
-      <div style="padding:7px 14px;border-radius:10px;background:var(--accent);font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;">Barchasi</div>
-      <div style="padding:7px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;cursor:pointer;">Kirim</div>
-      <div style="padding:7px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;cursor:pointer;">Chiqim</div>
-      <div style="padding:7px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;cursor:pointer;">O'tkazma</div>
+  <!-- HISTORY -->
+  <div class="tpanel" id="tp-history">
+    <div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;">
+      <div style="padding:7px 14px;border-radius:9px;background:var(--blue);font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;">Barchasi</div>
+      <div style="padding:7px 14px;border-radius:9px;background:var(--s1);border:1px solid var(--bdr);font-size:11.5px;font-weight:600;color:var(--muted);white-space:nowrap;cursor:pointer;">Kirim</div>
+      <div style="padding:7px 14px;border-radius:9px;background:var(--s1);border:1px solid var(--bdr);font-size:11.5px;font-weight:600;color:var(--muted);white-space:nowrap;cursor:pointer;">Chiqim</div>
+      <div style="padding:7px 14px;border-radius:9px;background:var(--s1);border:1px solid var(--bdr);font-size:11.5px;font-weight:600;color:var(--muted);white-space:nowrap;cursor:pointer;">O'tkazma</div>
     </div>
-
-    <!-- MONTH HEADER -->
-    <div style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">Mart 2026</div>
-    <div class="tx-list">
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(16,185,129,0.12);">💼</div>
-        <div class="tx-info"><div class="tx-name">Ish haqi</div><div class="tx-sub">15 Mart · 09:00</div></div>
-        <div class="tx-right"><div class="tx-amt pos">+12 500 000</div><div class="tx-time">✅ Bajarildi</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(14,165,233,0.12);">🏪</div>
-        <div class="tx-info"><div class="tx-name">Korzinka Market</div><div class="tx-sub">15 Mart · 12:40</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−285 000</div><div class="tx-time">✅ Bajarildi</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(245,158,11,0.12);">⚡</div>
-        <div class="tx-info"><div class="tx-name">UzbekEnergo</div><div class="tx-sub">14 Mart · 20:10</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−95 000</div><div class="tx-time">✅ Bajarildi</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(16,185,129,0.12);">📨</div>
-        <div class="tx-info"><div class="tx-name">Asilbekdan o'tkazma</div><div class="tx-sub">13 Mart · 17:05</div></div>
-        <div class="tx-right"><div class="tx-amt pos">+3 000 000</div><div class="tx-time">✅ Bajarildi</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(244,63,94,0.12);">🚕</div>
-        <div class="tx-info"><div class="tx-name">Yandex Taxi</div><div class="tx-sub">13 Mart · 09:20</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−38 000</div><div class="tx-time">✅ Bajarildi</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(14,165,233,0.12);">🍕</div>
-        <div class="tx-info"><div class="tx-name">Evos Burger</div><div class="tx-sub">12 Mart · 19:45</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−125 000</div><div class="tx-time">✅ Bajarildi</div></div>
-      </div>
+    <div class="msep">Mart 2026</div>
+    <div class="txlist">
+      <div class="txi"><div class="txico" style="background:rgba(14,203,129,.12);">💼</div><div class="txinfo"><div class="txn">Ish haqi</div><div class="txs">15 Mart · 09:00</div></div><div class="txr"><div class="txa p">+12 500 000</div><div class="txt">✓ Bajarildi</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(59,139,255,.12);">🏪</div><div class="txinfo"><div class="txn">Korzinka Market</div><div class="txs">15 Mart · 12:40</div></div><div class="txr"><div class="txa m">−285 000</div><div class="txt">✓ Bajarildi</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(240,185,11,.12);">⚡</div><div class="txinfo"><div class="txn">UzbekEnergo</div><div class="txs">14 Mart · 20:10</div></div><div class="txr"><div class="txa m">−95 000</div><div class="txt">✓ Bajarildi</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(14,203,129,.12);">📨</div><div class="txinfo"><div class="txn">Asilbekdan o'tkazma</div><div class="txs">13 Mart · 17:05</div></div><div class="txr"><div class="txa p">+3 000 000</div><div class="txt">✓ Bajarildi</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(246,70,93,.12);">🚕</div><div class="txinfo"><div class="txn">Yandex Taxi</div><div class="txs">13 Mart · 09:20</div></div><div class="txr"><div class="txa m">−38 000</div><div class="txt">✓ Bajarildi</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(59,139,255,.12);">🍕</div><div class="txinfo"><div class="txn">Evos Burger</div><div class="txs">12 Mart · 19:45</div></div><div class="txr"><div class="txa m">−125 000</div><div class="txt">✓ Bajarildi</div></div></div>
     </div>
-    <div style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin:18px 0 12px;">Fevral 2026</div>
-    <div class="tx-list">
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(16,185,129,0.12);">💼</div>
-        <div class="tx-info"><div class="tx-name">Ish haqi</div><div class="tx-sub">15 Fevral · 09:00</div></div>
-        <div class="tx-right"><div class="tx-amt pos">+12 500 000</div><div class="tx-time">✅ Bajarildi</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(245,158,11,0.12);">📦</div>
-        <div class="tx-info"><div class="tx-name">Uzum Market</div><div class="tx-sub">10 Fevral · 11:20</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−680 000</div><div class="tx-time">✅ Bajarildi</div></div>
-      </div>
-      <div class="tx-item">
-        <div class="tx-ico" style="background:rgba(244,63,94,0.12);">🏋️</div>
-        <div class="tx-info"><div class="tx-name">FitLife Gym</div><div class="tx-sub">1 Fevral · 08:00</div></div>
-        <div class="tx-right"><div class="tx-amt neg">−250 000</div><div class="tx-time">✅ Bajarildi</div></div>
-      </div>
+    <div class="msep">Fevral 2026</div>
+    <div class="txlist">
+      <div class="txi"><div class="txico" style="background:rgba(14,203,129,.12);">💼</div><div class="txinfo"><div class="txn">Ish haqi</div><div class="txs">15 Fevral · 09:00</div></div><div class="txr"><div class="txa p">+12 500 000</div><div class="txt">✓ Bajarildi</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(240,185,11,.12);">📦</div><div class="txinfo"><div class="txn">Uzum Market</div><div class="txs">10 Fevral · 11:20</div></div><div class="txr"><div class="txa m">−680 000</div><div class="txt">✓ Bajarildi</div></div></div>
+      <div class="txi"><div class="txico" style="background:rgba(246,70,93,.12);">🏋️</div><div class="txinfo"><div class="txn">FitLife Gym</div><div class="txs">1 Fevral · 08:00</div></div><div class="txr"><div class="txa m">−250 000</div><div class="txt">✓ Bajarildi</div></div></div>
     </div>
   </div>
 
-  <!-- TAB: SERVICES -->
-  <div class="tab-panel" id="panel-services">
-    <div class="sec-head" style="margin-bottom:16px;">
-      <div class="sec-title">Bank xizmatlari</div>
+  <!-- SERVICES -->
+  <div class="tpanel" id="tp-services">
+    <div class="shtop" style="margin-bottom:13px;"><div class="shtit">Bank xizmatlari</div></div>
+    <div class="svgrid" style="margin-bottom:18px;">
+      <div class="svc"><div class="svico">🏦</div><div class="svlbl">Kredit olish</div></div>
+      <div class="svc"><div class="svico">💳</div><div class="svlbl">Yangi karta</div></div>
+      <div class="svc"><div class="svico">🔒</div><div class="svlbl">Karta blok</div></div>
+      <div class="svc"><div class="svico">📊</div><div class="svlbl">Depozit</div></div>
+      <div class="svc"><div class="svico">🌍</div><div class="svlbl">Valyuta almashtirish</div></div>
+      <div class="svc"><div class="svico">📄</div><div class="svlbl">Kredit tarixi</div></div>
     </div>
-    <div class="services-grid" style="margin-bottom:22px;">
-      <div class="svc-card">
-        <div class="svc-icon">🏦</div>
-        <div class="svc-name">Kredit olish</div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">💳</div>
-        <div class="svc-name">Yangi karta</div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">🔒</div>
-        <div class="svc-name">Kartani bloklash</div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">📊</div>
-        <div class="svc-name">Depozit</div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">🌍</div>
-        <div class="svc-name">Valyuta almashtirish</div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">📄</div>
-        <div class="svc-name">Kreditlar tarixi</div>
-      </div>
-    </div>
-    <div class="sec-head" style="margin-bottom:16px;">
-      <div class="sec-title">Qo'shimcha xizmatlar</div>
-    </div>
-    <div class="services-grid">
-      <div class="svc-card">
-        <div class="svc-icon">🎓</div>
-        <div class="svc-name">Ta'lim krediti</div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">🏠</div>
-        <div class="svc-name">Ipoteka</div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">🚗</div>
-        <div class="svc-name">Avto kredit</div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">💎</div>
-        <div class="svc-name">Premium</div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">🤝</div>
-        <div class="svc-name">Kafil bo'lish</div>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon">📞</div>
-        <div class="svc-name">Qo'ng'iroq qilish</div>
-      </div>
+    <div class="shtop" style="margin-bottom:13px;"><div class="shtit">Qo'shimcha</div></div>
+    <div class="svgrid">
+      <div class="svc"><div class="svico">🎓</div><div class="svlbl">Ta'lim krediti</div></div>
+      <div class="svc"><div class="svico">🏠</div><div class="svlbl">Ipoteka</div></div>
+      <div class="svc"><div class="svico">🚗</div><div class="svlbl">Avto kredit</div></div>
+      <div class="svc"><div class="svico">💎</div><div class="svlbl">Premium</div></div>
+      <div class="svc"><div class="svico">🤝</div><div class="svlbl">Kafil</div></div>
+      <div class="svc"><div class="svico">📞</div><div class="svlbl">Qo'ng'iroq</div></div>
     </div>
   </div>
-</div><!-- end section -->
+</div>
 
 <!-- BOTTOM NAV -->
 <div class="bnav">
-  <a href="index.html" class="bn active">
-    <div class="bn-icon">🏠</div>
-    <div class="bn-label">Asosiy</div>
-  </a>
-  <div class="bn" onclick="switchTab('payments')">
-    <div class="bn-icon">💳</div>
-    <div class="bn-label">To'lovlar</div>
-  </div>
-  <a href="transfer.html" class="bn-center">💸</a>
-  <div class="bn" onclick="switchTab('history')">
-    <div class="bn-icon">📋</div>
-    <div class="bn-label">Tarix</div>
-  </div>
-  <div class="bn" onclick="switchTab('services')">
-    <div class="bn-icon">⚙️</div>
-    <div class="bn-label">Xizmatlar</div>
-  </div>
+  <a href="index.html" class="bn on"><div class="bni">🏠</div><div class="bnl">Asosiy</div></a>
+  <div class="bn" onclick="showTab('payments')"><div class="bni">💳</div><div class="bnl">To'lovlar</div></div>
+  <a href="transfer.html" class="bnctr">💸</a>
+  <div class="bn" onclick="showTab('history')"><div class="bni">📋</div><div class="bnl">Tarix</div></div>
+  <div class="bn" onclick="showTab('services')"><div class="bni">⚙️</div><div class="bnl">Xizmatlar</div></div>
 </div>
 
 <!-- PAYMENT MODAL -->
-<div id="payModal" style="display:none;position:fixed;inset:0;background:rgba(7,17,31,0.92);z-index:200;backdrop-filter:blur(10px);align-items:flex-end;justify-content:center;">
-  <div style="background:#0C1929;border-radius:28px 28px 0 0;padding:28px 24px 48px;width:100%;max-width:430px;animation:slideUp 0.3s ease;">
-    <div style="width:40px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 22px;"></div>
-    <h2 style="font-size:18px;font-weight:800;margin-bottom:6px;" id="payModalTitle">To'lov</h2>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:22px;">Hisob raqam va summani kiriting</p>
-    <input id="payAccInput" style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;color:var(--white);font-size:15px;font-family:var(--font);padding:15px 16px;outline:none;margin-bottom:12px;" placeholder="Hisob raqami" type="text">
-    <input id="payAmtInput" style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;color:var(--white);font-size:15px;font-family:var(--font);padding:15px 16px;outline:none;margin-bottom:20px;" placeholder="Summa (UZS)" type="number">
-    <button onclick="confirmPayment()" style="width:100%;padding:17px;background:linear-gradient(135deg,#0EA5E9,#2563EB);border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:700;font-family:var(--font);cursor:pointer;margin-bottom:10px;">To'lash ✓</button>
-    <button onclick="closePayModal()" style="width:100%;padding:14px;background:transparent;border:1.5px solid var(--border);border-radius:14px;color:var(--muted);font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;">Bekor qilish</button>
+<div class="mover" id="pmover">
+  <div class="mbox">
+    <div class="mpull"></div>
+    <div class="mtit" id="ptit">To'lov</div>
+    <div class="msub">Hisob raqam va summani kiriting</div>
+    <input class="minp" type="text" placeholder="Hisob raqami" id="pacc">
+    <input class="minp" type="number" placeholder="Summa (UZS)" id="pamt">
+    <button class="mbtn" onclick="doPay()">To'lash ✓</button>
+    <button class="mcncl" onclick="closePay()">Bekor qilish</button>
   </div>
 </div>
 
-<!-- SUCCESS TOAST -->
-<div id="toast" style="display:none;position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#10B981;color:#fff;padding:14px 24px;border-radius:16px;font-size:14px;font-weight:700;z-index:300;white-space:nowrap;box-shadow:0 8px 24px rgba(16,185,129,0.4);">
-  ✅ Muvaffaqiyatli to'landi!
-</div>
-
-<style>
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-</style>
+<div class="toast" id="toast"></div>
 
 <script>
 // TABS
-function switchTab(name) {
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
-  const tabMap = {transactions:0,payments:1,history:2,services:3};
-  const tabs = document.querySelectorAll('.tab');
-  if(tabMap[name]!==undefined) tabs[tabMap[name]].classList.add('active');
-  document.getElementById('panel-'+name).scrollIntoView({behavior:'smooth',block:'nearest'});
+function showTab(name){
+  document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('tp-'+name).classList.add('on');
+  const map={transactions:0,payments:1,history:2,services:3};
+  document.querySelectorAll('.tab')[map[name]]?.classList.add('on');
+  document.getElementById('tp-'+name).scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// CARD CLICK → transfer page with card param
+function goCard(num){
+  window.location.href='transfer.html?card='+num;
 }
 
 // CARD SCROLL DOTS
-const scroll = document.getElementById('cardsScroll');
-scroll.addEventListener('scroll', function() {
-  const idx = Math.round(scroll.scrollLeft / 314);
-  [0,1,2].forEach(i => {
-    const d = document.getElementById('dot'+i);
-    if(d) d.className = 'dot' + (i===idx?' active':'');
+const ct=document.getElementById('ctrack');
+ct.addEventListener('scroll',()=>{
+  const i=Math.round(ct.scrollLeft/304);
+  [0,1].forEach(j=>{
+    const d=document.getElementById('d'+j);
+    if(d) d.className='cdot'+(i===j?' on':'');
   });
 });
 
-function selectCard(i) {
-  const cards = scroll.children;
-  scroll.scrollTo({left: i * 314, behavior:'smooth'});
-}
-
 // PAYMENT MODAL
-let curPayment = '';
-function openPayment(name) {
-  curPayment = name;
-  document.getElementById('payModalTitle').textContent = name + ' to\'lovi';
-  const m = document.getElementById('payModal');
-  m.style.display = 'flex';
+let curSvc='';
+function openPay(name){curSvc=name;document.getElementById('ptit').textContent=name+' to\'lovi';document.getElementById('pmover').classList.add('sh');}
+function closePay(){document.getElementById('pmover').classList.remove('sh');}
+function doPay(){
+  const amt=document.getElementById('pamt').value;
+  if(!amt||amt<1000){alert("To'g'ri summa kiriting");return;}
+  closePay();
+  showToast('✅ '+curSvc+' to\'lovi bajarildi!');
 }
-function closePayModal() {
-  document.getElementById('payModal').style.display = 'none';
-}
-function confirmPayment() {
-  const amt = document.getElementById('payAmtInput').value;
-  if(!amt || amt < 1000) { alert("To'g'ri summa kiriting"); return; }
-  closePayModal();
-  showToast('✅ ' + curPayment + ' to\'lovi bajarildi!');
-}
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
-  setTimeout(()=>t.style.display='none', 2800);
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  setTimeout(()=>t.style.display='none',2800);
 }
 </script>
 </body>
