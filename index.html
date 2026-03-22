@@ -277,7 +277,6 @@ html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--w
 <body>
 
 <!-- STATUS BAR -->
-
 <!-- HEADER -->
 <div class="hdr fade-in">
   <div class="hdr-left">
@@ -294,19 +293,29 @@ html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--w
 <div class="cards-wrap fade-in">
   <div class="cards-scroll" id="cardsScroll">
 
-    <!-- CARD 1 - MAIN -->
-    <div class="bank-card bc-main" onclick="selectCard(0)">
+    <!-- CARD 1 - MAIN (BLOCKED) -->
+    <div class="bank-card bc-main" onclick="selectCard(0)" style="position:relative;">
       <div class="bc-top">
         <div class="bc-name">Smart<span>Bank</span></div>
-        <div class="chip-icon"></div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="background:rgba(244,63,94,0.25);border:1px solid rgba(244,63,94,0.5);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:#F87171;letter-spacing:0.5px;">Bloklangan</div>
+          <div class="chip-icon"></div>
+        </div>
       </div>
-      <div class="bc-balance">86 432 800 UZS</div>
+      <div class="bc-balance" style="opacity:0.5;text-decoration:line-through;text-decoration-color:rgba(244,63,94,0.6);">91 432 800 UZS</div>
       <div class="bc-bottom">
         <div>
           <div class="bc-num">•••• •••• •••• 4182</div>
           <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:5px;text-transform:uppercase;letter-spacing:1px;">Javoxir Sadullayev</div>
         </div>
-        <div class="bc-brand">HUMO</div>
+        <div class="bc-brand">VISA</div>
+      </div>
+      <div style="position:absolute;inset:0;border-radius:24px;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(1px);">
+        <div style="text-align:center;">
+          <div style="font-size:30px;">🔒</div>
+          <div style="font-size:13px;font-weight:700;color:#F87171;margin-top:4px;">Karta bloklangan</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Blokdan chiqarish uchun bog'laning</div>
+        </div>
       </div>
     </div>
 
